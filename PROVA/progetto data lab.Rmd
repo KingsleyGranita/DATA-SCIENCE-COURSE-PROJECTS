@@ -1,0 +1,79 @@
+---
+title: "progetto data lab"
+author: "Adonis Kingsley Granita"
+date: "10/30/2024"
+output: html_document
+---
+
+```{r}
+rm(list=ls())
+```
+
+
+# DATA EXPLORATION
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(xts)
+library(forecast)
+```
+
+```{r}
+df<-read.csv("df.csv")
+```
+
+```{r}
+View(df)
+```
+
+```{r}
+df |> 
+  mutate(data = as.Date(data, format = "%Y-%m-%d")) -> 
+  df
+```
+
+```{r}
+y <- xts(df$totale_R001, df$data)
+```
+
+```{r}
+plot(y["2018-09-01/22024-05-08"])
+```
+
+
+- a marzon del 2020 non ci sono vendite dovuto al lockdown
+
+```{r}
+plot(y["2020-04-01/2024-05-08"])
+```
+
+# TEST DI STAZIONARIETA
+
+....
+
+
+# STAZIONARIZZAZIONE
+
+```{r}
+ly<-log(y["2020-04-01/2024-05-08"]+1)
+plot(ly)
+```
+
+
+```{r}
+dly<-diff(ly)
+plot(dly)
+```
+
+# MODELLO
+
+```{r}
+Acf(y["2020-04-01/2024-05-08"], 366)
+Pacf(y["2020-04-01/2024-05-08"], 366)
+```
+
+```{r}
+Acf(dly, 366)
+Pacf(dly, 366)
+```
